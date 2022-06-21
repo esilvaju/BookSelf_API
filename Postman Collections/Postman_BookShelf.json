@@ -6,14 +6,53 @@
 	},
 	"item": [
 		{
-			"name": "New Request",
-			"id": "1be6ca3d-0a31-4d33-80e1-9f7cad4de8f5",
+			"name": "Create Booking Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ead00635-7997-4d97-941e-cc6db37f244a",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var fn = pm.variables.get(\"firstname\");\r",
+							"var ln = pm.variables.get(\"lastname\");\r",
+							"\r",
+							"pm.test(\"Check first name \" + fn, function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.booking.firstname).to.eql(fn);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check last name \" + ln, function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.booking.lastname).to.eql(ln);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "2afb4a3a-3f6c-4bd9-bea6-78028c3587cb",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\" : \"{{firstname}}\",\n    \"lastname\" : \"{{lastname}}\",\n    \"totalprice\" : 111,\n    \"depositpaid\" : true,\n    \"bookingdates\" : {\n        \"checkin\" : \"2018-01-01\",\n        \"checkout\" : \"2019-01-01\"\n    },\n    \"additionalneeds\" : \"Breakfast\"\n}"
+				},
+				"url": "{{rb_url}}/booking"
 			},
 			"response": []
 		}
